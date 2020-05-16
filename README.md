@@ -17,9 +17,9 @@
 
 2. Установка [Axios](https://github.com/axios/axios) [для доступа к API](https://ru.vuejs.org/v2/cookbook/using-axios-to-consume-apis.html)  ``npm install axios``
 
-3. Добавить в файле **pakage.json** в раздел *devDependencies* модули препроцессора css **"node-sass": "^4.14.1"** и **"sass-loader": "^8.0.2"** и проинсталировать их ``npm install``
+3. Установить модули sass препроцессора css ``npm install -D sass-loader node-sass``
 
-4. Установить глобально [JSON Server](https://github.com/typicode/json-server) ``npm install -g json-server`` для создания фэйкового API
+4. Установиглобально [JSON Server](https://github.com/typicode/json-server) ``npm install -g json-server`` для создания фэйкового API
 
 ## Создание компонентов
 
@@ -30,3 +30,11 @@
 2. Подключи дочерний компонент в родительский, *прим.:* ``import vMainWrapper from './components/v-main-wrapper'``, объявить в разделе *components* и вписать в вёрстку как html-тег, *прим.:* ``<v-main-wrapper>``
 
 > **v-main-wrapper** для Vue то же самое, что и **vMainWrapper** — делиние большими буквами равно дифисам
+
+## Подключение Sass
+
+1. Укажи настройки в корневом файле **vue.config.js**
+
+2. Сделай импорт в файл **main.js**
+
+3. В компоненте в блоке ``<style>`` укажи атрибут ``lang="scss"`` и можно писать стили сразу в scss
