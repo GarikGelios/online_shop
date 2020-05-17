@@ -52,3 +52,21 @@
 1. На кнопку добавь событие ``@click="sendDataToParent"`` и обработай его в разделе *methods* добавив *$emit* — это значит отправить на верх, где первый аргумент обязательно имя встречающего события и последующие аргументы это передаваемые элементы ``this.$emit('sendArticle', this.product_data.article)``
 
 2. В тэге дочернего компонента в родительском файле встречай событием с указанным методом который его обработает ``@sendArticle="showChildArticleInConsole"`` — метод примет агрументы и что-то с ними сделает, *прим.:* ``this.$emit('sendArticle', this.product_data.article)``
+
+## Vuex & Axios — общаемся с API
+
+1. Создай папку *vuex* с файлом store.js в который импортируй сам Vue.js ``import Vue from 'vue'``, модули Vuex ``import Vuex from 'vuex'`` и ``import axios from 'Axios'`` — укажи Vue использовать Vuex ``Vue.use(Vuex);``
+
+2. Создай переменную store и опиши её опции ``let store = new Vuex.Store({ /*опции*/ });`` и экспортируй её ``export default store;`` — про оции читай в [документации](https://vuex.vuejs.org/ru/guide/state.html)
+
+3. Импортирй *store* в файл *main.js* ``import store from './vuex/store'`` и добавь его к использованию в *new Vue* через запятую до рендеринга компонента *App*
+
+4. Запусти тестовую базу ``json-server --watch db.json`` что бы получить ссылку API
+
+5. В компонете каталога импортируй некоторые инструменты vuex ``import {mapActions, mapGetters} from 'vuex'``
+
+6. Укажи в *methods* через инструмент vuex, что есть функция для получения API ``...mapActions([ 'GET_PRODUCTS_FROM_API' ])`` которая будет вызывать мутацию для *state*
+
+7. Раздел *mounted* ждёт, как только отрендерится страница, чтобы запустить написанные в ней функции, впиши получение API ``mounted() { this.GET_PRODUCTS_FROM_API() }``
+
+8. В разделе вычесляемых элементов *computed*, чтобы быстро получать из данные из *state* инструментом vuex укажи геттер списка продуктов ``...mapGetters([ 'PRODUCTS' ])`` — теперь его используй в цикле ``v-for="product in PRODUCTS"``
