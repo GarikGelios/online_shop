@@ -95,4 +95,18 @@
 
 11. В *store* создай экшн *DELETE_FROM_CART* который заставит мутацию удалять из массива элемент по индексу ``REMOVE_FROM_CART: (state, index) => { state.cart.splice(index, 1) }``
 
+## Vue Router — отдельные страницы в приложении
 
+1. Установи [Vue Router](https://router.vuejs.org/installation.html) командой ``npm install vue-router``
+
+2. Создай директорию *src/router* и в ней файл *router.js* в который сделай импорты ``import Vue from 'vue'``, ``import Router from 'vue-routert'`` и укажи использвать *router* во *vue* ``Vue.use(Router);``
+
+3. Импортируй компоненты *vCatalog* и *vCart*, которые будут доступны по разным url и добавь их внутри роутера ``let router = new Router({ routes: [ ... ]})`` в руты как объекты массива *routes* ``{ path: "/", name: "catalog", component: vCatalog }`` и если необходимо передовать данные то и ``props: true``. В конце файла добавь экспорт ``export default router``
+
+4. Импортируй *router* в файл *main.js* и добавь к используемым во *Vue*
+
+5. В оберточном компоненте добавь тэг ``<router-view></router-view>`` — внутри этого тэга и будет происходить роутинг
+
+6. На корневой странице(*компаненте*) создай ссылку на другую страницу тегом *router-link* с аттрибутом указывающим к какому компоненту переходим и какие параметры ему передаём ``:to="{name: 'cart', params: {cart_data: CART}}"``. На другой странице создай обратную ссылку
+
+7. Для корректного подсчёта количества товара, чтобы не было NaN, добавь добавление свойства с количеством и единицей в *store.js* ``state.cart.push({ ...product, quantity: 1 })``
