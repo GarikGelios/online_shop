@@ -31,6 +31,14 @@ let store = new Vuex.Store({
         },
         REMOVE_FROM_CART: (state, index) => {
             state.cart.splice(index, 1)
+        },
+        DECREMENT(state, index) {
+            if (state.cart[index].quantity > 1) {
+                state.cart[index].quantity--
+            }
+        },
+        INCREMENT(state, index) {
+            state.cart[index].quantity++
         }
     }, 
     actions: { //асинфронные функции
@@ -51,6 +59,15 @@ let store = new Vuex.Store({
         ADD_TO_CART({commit}, product) { //функция реагирует на нажатие кнопки @click="addToCart" и отправляет на мутацию обект
             commit('SET_CART', product)
         },
+
+        DECREMENT_CART_ITEM({commit}, index) {
+            commit('DECREMENT', index)
+        },
+
+        INCREMENT_CART_ITEM({commit}, index) {
+            commit('INCREMENT', index)
+        },
+        
         DELETE_FROM_CART({commit}, index) {
             commit('REMOVE_FROM_CART', index)
         }
