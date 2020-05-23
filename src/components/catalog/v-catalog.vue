@@ -4,9 +4,17 @@
       <div class="v-catalog__link_to_cart">Cart: {{ CART.length }}</div>
     </router-link>
     <h2>Catalog</h2>
+
+    <v-select
+      :category="category"
+      @select="selectCategory"
+      :selected="selected"
+    />
+    <p v-if="selected != 'Select ▼'">Selected is: {{ selected }}</p>
+
     <div class="v-catalog__list">
       <v-catalog-item 
-        v-for="product in PRODUCTS"
+        v-for="product in sortedProductsFinal"
         :key="product.article"
         :product_data="product"
         @addToCart="addToCart"
@@ -17,23 +25,42 @@
 
 <script>
 import vCatalogItem from "@/components/catalog/v-catalog-item";
+import vSelect from "./../v-select";
+
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
   name: "v-catalog",
   components: {
-    vCatalogItem
+    vCatalogItem,
+    vSelect
   },
   props: {},
   data() {
+    //переменные свойства внутри компонента
     return {
+      //обязательно возвращать
+      category: [
+        { name: "Мужские", value: 'm' },
+        { name: "Женские", value: 'w' },
+        { name: "Все", value: 'all' },
+      ],
+      selected: 'Select ▼',
+      sortedProducts: []
     };
   },
   computed:{
     ...mapGetters([
       'PRODUCTS',
       'CART'
-    ])
+    ]),
+    sortedProductsFinal() {
+      if (this.sortedProducts.length) {
+        return this.sortedProducts
+      } else {
+        return this.PRODUCTS
+      }
+    }
   },
   methods: {
     ...mapActions([
@@ -42,6 +69,12 @@ export default {
     ]),
     addToCart(data) {
       this.ADD_TO_CART(data)
+    },
+    selectCategory(option) {
+      this.selected = option.name;
+      this.sortedProducts = this.PRODUCTS.filter(function(product) {
+        return product.category === option.name
+      })
     }
   },
   mounted() {
@@ -61,15 +94,14 @@ export default {
   &__list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
   }
   &__link_to_cart {
     position: absolute;
     top: 10px;
     right: 10px;
-    padding: $padding*2;
-    border: 1px solid #aeaeae;
+    @include paddindBorder;
   }
 }
 </style>

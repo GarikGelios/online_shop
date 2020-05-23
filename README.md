@@ -179,3 +179,25 @@ methods: {
 ```
 
 9. Объединяй родственные компоненты в папки. Проверь пути в *router.js*, а для статики испольщуй пути c *@*, что позволит писать от корня ``:src="require('@/assets/images/' + cart_item_data.image)"``
+
+## Нативный select
+
+1. Создай компонент для селекта *v-select*, ипортируй к компонент отображения, укажи в *components* и добавь его тег в нужно место html DOM
+
+2. Создай в родительском компоненте массив опций селекта в *data* укажи их для передачи в аттрибуте ``<v-select :category="category" />`` и прими их в дочернем в *props*
+
+3. Перебери и выведи содержимое массива ``<p v-for="option in category" :key="option.value">{{ option.name }}</p>``
+
+4. Скрой список опций ``v-if="isOptionVisible"`` и меняй значение при клике на кнопку ``@click="isOptionVisible = !isOptionVisible"``
+
+5. Добавь обработчик клика по опции в который передай аргументом всю опцию ``@click="selectOption(option)"`` и передай результат работы метода на верх ``selectOption(option) { this.$emit('select', option) }`` и прими в родительском для вызова метода сортировки ``@select="selectCategory"``
+
+6. В методе *selectCategory* с переданным параметром *option* сделай фильтр массива *PRODUCTS* в массив *sortedProducts* с условием, что название категории в продукте соответствует переданной опции
+
+```js
+this.sortedProducts = this.PRODUCTS.filter(function(product) {
+        return product.category === option.name
+      })
+```
+
+7. Создай в *computed* вычисляемый массив результата фильтрации с проверкой, что если фильтрация содержит данные, то её использовать, если нет то возвращать *PRODUCTS* — по этому результату и выводи товары на странице
