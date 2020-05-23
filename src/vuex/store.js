@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Axios from 'axios';
+
+import mutations from './mutations/mutations'
+import commonActions from './actions/actions'
+import apiRequest from './actions/api-request'
+import getters from './getters/getters'
+
+const actions = {...commonActions, ...apiRequest}
 
 Vue.use(Vuex); //указал Vue использовать Vuex
 
@@ -9,77 +15,10 @@ let store = new Vuex.Store({
         products: [], //пустой массив, в него будем передавать данные
         cart: [] 
     }, 
-    mutations: { //синхронные функции изменяющие store
-        SET_PRODUCTS_TO_STATE: (state, products) => {
-            state.products = products;
-        },
-        SET_CART: (state, product) => { //принимает обект из экшена, когда нажали кнопку и добавляет его в массив cart: [] 
-            if (state.cart.length) {
-                let isProductExists = false;
-                state.cart.map(function(item) {
-                    if (item.article === product.article) {
-                        isProductExists = true;
-                        item.quantity++
-                    }
-                })
-                if (!isProductExists) {
-                    state.cart.push({ ...product, quantity: 1 })
-                }
-            } else {
-                state.cart.push({ ...product, quantity: 1 })
-            }
-        },
-        REMOVE_FROM_CART: (state, index) => {
-            state.cart.splice(index, 1)
-        },
-        DECREMENT(state, index) {
-            if (state.cart[index].quantity > 1) {
-                state.cart[index].quantity--
-            }
-        },
-        INCREMENT(state, index) {
-            state.cart[index].quantity++
-        }
-    }, 
-    actions: { //асинфронные функции
-        GET_PRODUCTS_FROM_API({commit}) {
-            const url = 'http://localhost:3000/products';
-            return Axios(url, {
-                method: 'GET'
-            })
-            .then((products) => {
-                commit('SET_PRODUCTS_TO_STATE', products.data);
-                return products;
-            })
-            .catch((error) => { //если вдруг ошибка
-                console.log(error);
-                return error;
-            })
-        },
-        ADD_TO_CART({commit}, product) { //функция реагирует на нажатие кнопки @click="addToCart" и отправляет на мутацию обект
-            commit('SET_CART', product)
-        },
-
-        DECREMENT_CART_ITEM({commit}, index) {
-            commit('DECREMENT', index)
-        },
-
-        INCREMENT_CART_ITEM({commit}, index) {
-            commit('INCREMENT', index)
-        },
+    mutations, //синхронные функции изменяющие store 
+    actions, //асинфронные функции
+    getters //короткий путь до данных в state
         
-        DELETE_FROM_CART({commit}, index) {
-            commit('REMOVE_FROM_CART', index)
-        }
-    }, 
-    getters: { //короткий путь до данных в state
-        PRODUCTS(state) {
-            return state.products; //реактивно получает данные из массива products: [], который в state
-        },
-        CART(state) {
-            return state.cart;
-        }
-    } 
 
 });
 

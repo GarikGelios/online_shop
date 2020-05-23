@@ -122,3 +122,60 @@
 4. Создай в *store.js* экшены для добавления и удаления количества товара с переменной индекса ``DECREMENT_CART_ITEM({commit}, index) { commit('INCREMENT', index) }``. Cделай экшены доступными в компоненте *vue-cart* с помощь *mapAction* и добавь в методы которые выхываются по кликам по кнопка - и +
 
 5. Создай мутации от экшена на изменения количества ``INCREMENT(state, index) { state.cart[index].quantity++ }``. В удалении проверь, чтобы количество не было меньше единицы
+
+## Refactoring — best practices
+
+1. Одинаковый префикс и смысловые названия компонентов
+
+2. Имена компонентов в kebab-case, а при импорте camelCase ``import vCartItem from "@/components/v-cart-item";``
+
+3. Всегда писать в props тип данных и что возвращает по умолчанию
+
+```js
+props: {
+    cart_item_data: {
+      type: Object,
+      default() {
+        return {};
+      }
+    }
+  },
+```
+
+4. Если у элемента больше одного атрибута, то записывать их в столбик
+
+```html
+<v-cart-item
+      v-for="(item, index) in cart_data"
+      :key="item.article"
+      :cart_item_data="item"
+      @deleteFromCart="deleteFromCart(index)"
+      @decrement="decrement(index)"
+      @increment="increment(index)"
+    />
+```
+
+5. Boolean переменные начинать с *is* ``let isProductExists = false;``
+
+6. Методы компонентов с маленькой буквы в camelCase, а действия(методы) Vuex в uppercase ``deleteFromCart(index) { this DELETE_FROM_CART(index); }``
+
+7. Разделять *state*, *mutations*, *actions* и *getters* по отдельным папкам. Декомпозируй логически на файлы и импортируй объедения в *store.js* ``const actions = {...commonActions, ...apiRequest}``
+
+8. Используй в компонентах *mapGetters* для получения и *mapActions* для работы с данными из *store*
+
+```js
+computed:{
+    ...mapGetters([
+      'PRODUCTS',
+      'CART'
+    ])
+  },
+methods: {
+    ...mapActions([
+      'GET_PRODUCTS_FROM_API',
+      'ADD_TO_CART'
+    ]),
+  }
+```
+
+9. Объединяй родственные компоненты в папки. Проверь пути в *router.js*, а для статики испольщуй пути c *@*, что позволит писать от корня ``:src="require('@/assets/images/' + cart_item_data.image)"``
