@@ -13,7 +13,8 @@ Vue.use(Vuex); //указал Vue использовать Vuex
 let store = new Vuex.Store({
     state: { //хранилище данных
         products: [], //пустой массив, в него будем передавать данные
-        cart: [] 
+        cart: [],
+        windowSize: '' //размер экрана
     }, 
     mutations, //синхронные функции изменяющие store 
     actions, //асинфронные функции

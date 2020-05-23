@@ -13,5 +13,8 @@ export default {
     
     DELETE_FROM_CART({commit}, index) {
         commit('REMOVE_FROM_CART', index)
-    }    
+    },
+    WINDOW_SIZE({commit}, size) {
+        commit('CHANGE_WINDOW_SIZE', size)
+    }   
 }

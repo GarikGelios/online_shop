@@ -201,3 +201,54 @@ this.sortedProducts = this.PRODUCTS.filter(function(product) {
 ```
 
 7. Создай в *computed* вычисляемый массив результата фильтрации с проверкой, что если фильтрация содержит данные, то её использовать, если нет то возвращать *PRODUCTS* — по этому результату и выводи товары на странице
+
+## Отслеживать изменения размера экрана в VUEX
+
+1. В исходном компонете объяви переменные
+
+```js
+    windowWidth: 1200, // ширина экрана
+    windowType: ''     // тип экрана
+```
+
+2. Опиши размеры и типы  в *mounted()*, чтобы сразу при его отрисовке использовались
+
+```js
+    function switchWindowType(ww) { // сопоставляем размеры и тип
+      if (ww >= 1200) {
+        return "Extra large";
+      } else if (ww >= 992 && ww <= 1199) {
+        return "Large";
+      } else if (ww >= 768 && ww <= 991) {
+        return "Medium";
+      } else if (ww >= 576 && ww <= 767) {
+        return "Small";
+      } else {
+        return "Extra small";
+      }
+    }
+```
+
+3. Опиши фунцию, которая будет присваивать значения переменным и вызывать экшен. Вызови её при загрузке странице и запиши вызов при каждом изменении размера окна
+
+```js
+   function listenWindowSize() { //функция, которая будет измерять экран
+      windowWidth = window.innerWidth;
+      windowType = switchWindowType(windowWidth); //имея размер определяем тип через функцию, где сопаставлены размеры и тип
+      vm.WINDOW_SIZE(windowType); //обращаемся к экшену и передаём ему тип
+    }
+
+    listenWindowSize(); //сразу вызываем написанную выше фунцию
+
+    window.addEventListener("resize", function() { //запускаем всегда слушать изменения размера окна
+      listenWindowSize();
+    });
+```
+
+4. импортируй ``import { mapActions } from "vuex";`` и подключи для использования экшен ``...mapActions(["WINDOW_SIZE"])``
+
+5. Экшен приниает название типа окна и передаёт его в мутацию ``WINDOW_SIZE({commit}, size) { commit('CHANGE_WINDOW_SIZE', size) } ``
+
+6. Мутация принимает экшен и изменяет *store* ``CHANGE_WINDOW_SIZE(state, size) { state.windowSize = size; }``
+
+7. Выведи значение типа экрана в *getters* ``WINDOW_TYPE(state) { return state.windowSize; } ``, чтобы использовать его в компонентах, прим. ``<small>window size: {{ this.WINDOW_TYPE }}</small>``

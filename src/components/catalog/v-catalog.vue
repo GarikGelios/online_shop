@@ -4,7 +4,7 @@
       <div class="v-catalog__link_to_cart">Cart: {{ CART.length }}</div>
     </router-link>
     <h2>Catalog</h2>
-
+<small>window size: {{ this.WINDOW_TYPE }}</small>
     <v-select
       :category="category"
       @select="selectCategory"
@@ -52,7 +52,8 @@ export default {
   computed:{
     ...mapGetters([
       'PRODUCTS',
-      'CART'
+      'CART',
+      'WINDOW_TYPE'
     ]),
     sortedProductsFinal() {
       if (this.sortedProducts.length) {

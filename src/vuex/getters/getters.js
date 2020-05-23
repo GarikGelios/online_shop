@@ -4,5 +4,8 @@ export default {
     },
     CART(state) {
         return state.cart;
-    }    
+    },
+    WINDOW_TYPE(state) {
+        return state.windowSize;
+    }   
 }

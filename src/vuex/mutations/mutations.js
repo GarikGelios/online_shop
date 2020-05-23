@@ -28,5 +28,8 @@ export default {
     },
     INCREMENT(state, index) {
         state.cart[index].quantity++
+    },
+    CHANGE_WINDOW_SIZE(state, size) {
+        state.windowSize = size;
     }
 }
