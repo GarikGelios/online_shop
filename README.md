@@ -41,7 +41,7 @@
 
 ## Вывод массива
 
-1. Вывод статического массива в родительском компоненте делай через ``v-fore="product in products"``, обязательно указать уникальный ключ в объекте из массива``:key="product.article"`` и передать в дочерний элемент очередной объект при переборе массива ``:product_data="product"``
+1. Вывод статического массива в родительском компоненте делай через ``v-for="product in products"``, обязательно указать уникальный ключ в объекте из массива``:key="product.article"`` и передать в дочерний элемент очередной объект при переборе массива ``:product_data="product"``
 
 2. В дочернем компоненте надо принять в разделе *props* элемент *product_data*, указать ему *type: Object* и что по умолчанию он возвращает пустой объект *return {}* — т.е. если массив пуст, то и карточек товара не будет
 
@@ -204,7 +204,7 @@ this.sortedProducts = this.PRODUCTS.filter(function(product) {
 
 ## Отслеживать изменения размера экрана в VUEX
 
-1. В исходном компонете объяви переменные
+1. В исходном компонете объяви переменные в *data*
 
 ```js
     windowWidth: 1200, // ширина экрана
@@ -233,9 +233,9 @@ this.sortedProducts = this.PRODUCTS.filter(function(product) {
 
 ```js
    function listenWindowSize() { //функция, которая будет измерять экран
-      windowWidth = window.innerWidth;
-      windowType = switchWindowType(windowWidth); //имея размер определяем тип через функцию, где сопаставлены размеры и тип
-      vm.WINDOW_SIZE(windowType); //обращаемся к экшену и передаём ему тип
+      vm.windowWidth = window.innerWidth;
+      vm.windowType = switchWindowType(vm.windowWidth); //имея размер определяем тип через функцию, где сопаставлены размеры и тип
+      vm.WINDOW_SIZE(vm.windowType); //обращаемся к экшену и передаём ему тип
     }
 
     listenWindowSize(); //сразу вызываем написанную выше фунцию
@@ -252,3 +252,36 @@ this.sortedProducts = this.PRODUCTS.filter(function(product) {
 6. Мутация принимает экшен и изменяет *store* ``CHANGE_WINDOW_SIZE(state, size) { state.windowSize = size; }``
 
 7. Выведи значение типа экрана в *getters* ``WINDOW_TYPE(state) { return state.windowSize; } ``, чтобы использовать его в компонентах, прим. ``<small>window size: {{ this.WINDOW_TYPE }}</small>``
+
+## Ползунковый select — дополнительная сортировка
+
+1. Создай компонент *v-range* с двумя инпутами типа *range* и стилизуй, чтобы они были на одной линии, вынеси значения в *data()* из ползунков через ``v-model.number="minPrice"`` и следи за ним ``@mousemove="doNotCrosRange"``. Добавь компонент в нужном месте компонента каталога
+
+2. Опиши метод слежения за ползунком, пока придума только это:
+
+```js
+doNotCrosRange() {
+          if(this.minPrice + this.step >= this.maxPrice) {
+              let tmpMin = this.minPrice;
+              let tmpMax = this.maxPrice;
+              this.maxPrice = tmpMin + this.step
+              this.minPrice = tmpMax - this.step
+          }
+      }
+```
+
+3. Вытащи через геттер массив продуктов и создай пустой массив и метод, который будет отфильтровывать массив продуктов по признаку минимальной и максимальной цены. Метод должен вызываться сразу при рендеринге компонента и при изменении значений в ползунках
+
+```js
+sortByPrice() {
+  let vm = this;
+  this.sortedProductsPrice = this.PRODUCTS.filter(function(product) {
+    return product.price >= vm.minPrice && product.price <= vm.maxPrice
+  })
+  this.$emit('sortedProductsPrice', this.sortedProductsPrice) //перадать на верх, в v-catalog
+}
+```
+
+4. Встречай в родительском компоненте массив отфильтрованных товаров ``<v-range @sortedProductsPrice='dataSortedProductsPrice' />`` и заполняй ими местный массив, с помощью одноименного метода и полученных данных ``dataSortedProductsPrice(data){ this.sortedProductsPrice = data }``
+
+5. 
