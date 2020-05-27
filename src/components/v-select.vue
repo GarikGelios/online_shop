@@ -1,5 +1,5 @@
 <template>
-  <aside class="v-select">
+  <div class="v-select">
     <p @click="isOptionVisible = !isOptionVisible">{{ selected }}</p>
     <div v-if="isOptionVisible">
       <p
@@ -8,7 +8,7 @@
         @click="selectOption(option)"
       >{{ option.name }}</p>
     </div>
-  </aside>
+  </div>
 </template>
 
 <script>

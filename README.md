@@ -255,7 +255,7 @@ this.sortedProducts = this.PRODUCTS.filter(function(product) {
 
 ## Ползунковый select — дополнительная сортировка
 
-1. Создай компонент *v-range* с двумя инпутами типа *range* и стилизуй, чтобы они были на одной линии, вынеси значения в *data()* из ползунков через ``v-model.number="minPrice"`` и следи за ним ``@mousemove="doNotCrosRange"``. Добавь компонент в нужном месте компонента каталога
+1. Создай в компоненте *v-catalog* два инпутами типа *range* и стилизуй, чтобы они были на одной линии, вынеси значения в *data()* из ползунков через ``v-model.number="minPrice"`` и следи за ним ``@mousemove="doNotCrosRange"``. 
 
 2. Опиши метод слежения за ползунком, пока придума только это:
 
@@ -270,18 +270,8 @@ doNotCrosRange() {
       }
 ```
 
-3. Вытащи через геттер массив продуктов и создай пустой массив и метод, который будет отфильтровывать массив продуктов по признаку минимальной и максимальной цены. Метод должен вызываться сразу при рендеринге компонента и при изменении значений в ползунках
+3. В *selectCategory()* в первой очереди при создании компонента наполни массив сортированных продуктов из всего списка продуктов ``this.sortedProducts = [...this.PRODUCTS]``
 
-```js
-sortByPrice() {
-  let vm = this;
-  this.sortedProductsPrice = this.PRODUCTS.filter(function(product) {
-    return product.price >= vm.minPrice && product.price <= vm.maxPrice
-  })
-  this.$emit('sortedProductsPrice', this.sortedProductsPrice) //перадать на верх, в v-catalog
-}
-```
-
-4. Встречай в родительском компоненте массив отфильтрованных товаров ``<v-range @sortedProductsPrice='dataSortedProductsPrice' />`` и заполняй ими местный массив, с помощью одноименного метода и полученных данных ``dataSortedProductsPrice(data){ this.sortedProductsPrice = data }``
+4. 
 
 5. 
