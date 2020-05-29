@@ -16,7 +16,7 @@
           <input
             type="range"
             min="0"
-            max="990"
+            max="4990"
             :step="step"
             v-model.number="minPrice"
             @mousemove="doNotCrosRange"
@@ -24,7 +24,7 @@
           <input
             type="range"
             min="10"
-            max="1000"
+            max="5000"
             :step="step"
             v-model.number="maxPrice"
             @mousemove="doNotCrosRange"
@@ -69,7 +69,7 @@ export default {
       ],
       selected: "Select ▼",
       minPrice: 0,
-      maxPrice: 1000,
+      maxPrice: 5000,
       step: 10,
       sortedProducts: []
     };

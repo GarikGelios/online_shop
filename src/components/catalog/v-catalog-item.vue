@@ -11,14 +11,14 @@
     <div>
       <img :src="require('@/assets/images/' + product_data.image)" alt="img" />
       <p class="v-catalog-item__name">{{ product_data.name }}</p>
-      <p class="v-catalog-item__price">Price: {{ Math.round(product_data.price) }}</p>
+      <p class="v-catalog-item__price">Price: {{ product_data.price | toFix | formattedPrice }}</p>
       <p class="v-catalog-item__price">{{ product_data.category }}</p>
     </div>
     </v-popup>
 
     <img :src="require('@/assets/images/' + product_data.image)" alt="img" />
     <p class="v-catalog-item__name">{{ product_data.name }}</p>
-    <p class="v-catalog-item__price">Price: {{ Math.round(product_data.price) }}</p>
+    <p class="v-catalog-item__price">Price: {{ product_data.price | toFix | formattedPrice }}</p>
 
     <div class="btm_group">
       <button class="v-catalog-item__show_info btn" @click="showInfo">Show info</button>
@@ -29,6 +29,8 @@
 
 <script>
 import vPopup from "@/components/popup/v-popup";
+import toFix from "@/filters/toFix";
+import formattedPrice from "@/filters/price-format";
 
 export default {
   name: "v-catalog-item",
@@ -47,6 +49,10 @@ export default {
     return {
       isInfoPopupVisible: false
     }
+  },
+  filters: {
+    toFix,
+    formattedPrice
   },
   methods: {
     addToCart() {
