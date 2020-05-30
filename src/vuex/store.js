@@ -14,7 +14,8 @@ let store = new Vuex.Store({
     state: { //хранилище данных
         products: [], //пустой массив, в него будем передавать данные
         cart: [],
-        windowSize: '' //размер экрана
+        windowSize: '', //размер экрана
+        searchValue: ''
     }, 
     mutations, //синхронные функции изменяющие store 
     actions, //асинфронные функции

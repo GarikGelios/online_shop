@@ -298,3 +298,68 @@ export default function toFix(value){
 2. Импортируй в компонент фильтр который хочешь использовать ``import toFix from "@/filters/toFix";`` и объяви его в объектах компонента ``filters: { toFix }`` — сюда подлючаться будут и другие фильтры
 
 3. Добавь через вертикальный разделитель к переменной фильтр ``{{ product_data.category | toFix }}`` — следующий фильтр так же добавляй через вертикальный разделитель
+
+## Поиск на сайте
+
+1. Создай компонент *v-header* в который добавь тектовый инпут, значение которого надо реактивно отслеживать ``v-model="searchValue"``
+
+2. Добавь кнопку, которая будет вызывать метод ``@click="search(searchValue)"`` передающий значение текстового инпута в экшен  
+
+```js
+search(value) {
+  this.GET_SEARCH_VALUE(value) //отправляем данные в экшен
+  if (this.$route.path !== 'catalog') { //проверяем, не находимся ли мы на странице каталога
+    this.$router.push('/catalog') //перенаправляем на страницк каталога
+  }
+}
+```
+
+где экшен передаёт значение в мутацию
+
+```js
+GET_SEARCH_VALUE({commit}, value) {
+  commit('SET_SEARCH_VALUE', value)
+}
+```
+
+мутация изменяет в *store* данные ``searchValue: ''``
+
+```js
+SET_SEARCH_VALUE(state, value) {
+  state.searchValue = value
+}
+```
+
+3. Получи данные о поиске в компоненте каталога с помощью геттера
+
+```js
+SEARCH_VALUE(state) {
+  return state.searchValue
+}
+```
+
+4. Добавь раздел с слежением за изменением в переданом геттером
+
+```js
+watch: {
+  SEARCH_VALUE() {
+    this.sortProductsBySearchValue(this.SEARCH_VALUE); //каждое изменение SEARCH_VALUE будет вызывать функцию
+  }
+},
+```
+
+5. Опиши фунцию перебирающую массив по задданному слову в инпуте
+
+```js
+sortProductsBySearchValue(value) {
+  this.sortedProducts = [...this.PRODUCTS];
+      
+  if (value) {
+    this.sortedProducts = this.sortedProducts.filter(function (item) {
+    return item.name.toLowerCase().includes(value.toLowerCase())
+  })
+  } else {
+    this.sortedProducts = this.PRODUCTS;
+  }
+}
+```    

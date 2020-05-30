@@ -75,7 +75,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["PRODUCTS", "CART", "WINDOW_TYPE"]),
+    ...mapGetters(["PRODUCTS", "CART", "WINDOW_TYPE", 'SEARCH_VALUE']),
     sortedProductsFinal() {
       if (this.sortedProducts.length) {
         return this.sortedProducts;
@@ -114,6 +114,23 @@ export default {
           return product.category === option.name;
         });
       }
+    },
+
+    sortProductsBySearchValue(value) {
+      this.sortedProducts = [...this.PRODUCTS];
+      
+      if (value) {
+        this.sortedProducts = this.sortedProducts.filter(function (item) {
+          return item.name.toLowerCase().includes(value.toLowerCase())
+        })
+      } else {
+        this.sortedProducts = this.PRODUCTS;
+      }
+    }
+  },
+  watch: {
+    SEARCH_VALUE() {
+      this.sortProductsBySearchValue(this.SEARCH_VALUE); //каждое изменение SEARCH_VALUE будет вызывать функцию
     }
   },
   mounted() {
@@ -123,6 +140,7 @@ export default {
         //проверь на наличие содержимого
         console.log("Data arrived!"); //если ок, напиши, что всё пришло
         this.selectCategory(); //сразу вызываем функцию сортировки
+        this.sortProductsBySearchValue(this.SEARCH_VALUE);
       }
     });
   }
@@ -142,7 +160,7 @@ export default {
   }
   &__link_to_cart {
     position: absolute;
-    top: 10px;
+    top: 80px;
     right: 10px;
     @include paddindBorder;
   }

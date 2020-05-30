@@ -7,5 +7,8 @@ export default {
     },
     WINDOW_TYPE(state) {
         return state.windowSize;
-    }   
+    },
+    SEARCH_VALUE(state) {
+        return state.searchValue
+    }
 }

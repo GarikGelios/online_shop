@@ -16,5 +16,8 @@ export default {
     },
     WINDOW_SIZE({commit}, size) {
         commit('CHANGE_WINDOW_SIZE', size)
-    }   
+    },
+    GET_SEARCH_VALUE({commit}, value) {
+        commit('SET_SEARCH_VALUE', value)
+    }
 }

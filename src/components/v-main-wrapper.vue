@@ -1,21 +1,26 @@
 <template>
   <div class="v-main-wrapper">
-    <h1>{{title}}</h1>
-    <router-view></router-view>
+    <v-header/>
+    <main>
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 
 <script>
+import vHeader from '@/components/layouts/v-header'
+
 export default {
   name: "v-main-wrapper", //название компонента
   props: {}, //свойства из других компонентов
   data() { //переменные свойства внутри компонента
     return {
       //обязательно возвращать
-      title: "My online-shop",
     }
   },
-  components: {},
+  components: {
+    vHeader
+  },
   computed: {}, //вычисляемые свойства
   methods: {
     //методы, различные действия внутри компонента
@@ -26,6 +31,9 @@ export default {
 </script>
 
 <style>
+main {
+  margin-top: 70px;
+}
 .v-main-wrapper {
   max-width: 900px;
   margin: 0 auto;

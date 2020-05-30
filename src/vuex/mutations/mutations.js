@@ -31,5 +31,8 @@ export default {
     },
     CHANGE_WINDOW_SIZE(state, size) {
         state.windowSize = size;
+    },
+    SET_SEARCH_VALUE(state, value) {
+        state.searchValue = value
     }
 }
